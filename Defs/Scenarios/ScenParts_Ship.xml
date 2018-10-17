@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ScenPartDef>
+    <defName>Rule_LandShip</defName>
+    <label>land ship</label>
+    <scenPartClass>ScenPart_LandShip</scenPartClass>
+    <category>StartingImportant</category>
+    <selectionWeight>1.0</selectionWeight>
+    <summaryPriority>999</summaryPriority>
+  </ScenPartDef>
+
+</Defs>
