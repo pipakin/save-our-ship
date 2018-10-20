@@ -18,6 +18,10 @@ namespace ShipsHaveInsides.Mod
                 {
                     __result = true;
                 }
+                else if (newDef.defName == "ShipInside_PassiveCooler" && oldDef.defName == "Ship_Beam_Modular")
+                {
+                    __result = true;
+                }
             }
         }
     }

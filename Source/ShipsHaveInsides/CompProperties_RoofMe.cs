@@ -1,6 +1,6 @@
 ﻿using Verse;
 
-namespace Rimworld
+namespace RimWorld
 {
   public class CompProperties_RoofMe : CompProperties
   {

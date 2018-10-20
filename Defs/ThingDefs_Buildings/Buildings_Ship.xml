@@ -37,7 +37,7 @@
       <li Class="CompProperties_ShipPart"/>
     </comps>
     <placeWorkers>
-      <li>PlaceWorker_NotUnderRoof</li>
+      <li>PlaceWorker_NotUnderNonShipRoof</li>
     </placeWorkers>
     <building>
       <shipPart>true</shipPart>
@@ -88,7 +88,7 @@
         <transmitsPower>true</transmitsPower>
       </li>
       <li Class="CompProperties_ShipPart"/>
-	  <li Class="CompProperties_RoofMe"/>
+		  <li Class="CompProperties_RoofMe"/>
     </comps>
     <placeWorkers>
       <li>PlaceWorker_InsideShipRoom</li>
@@ -171,10 +171,26 @@
     <label>ship structural module</label>
     <description>A small structural module around which a ship can be constructed.</description>
     <thingClass>Building</thingClass>
-    <graphicData>
-      <texPath>Things/Building/Ship/BeamSingle</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
+		<graphicData>
+      <texPath>Things/Building/Linked/ShipBeam</texPath>
+      <graphicClass>Graphic_Appearances</graphicClass>
+      <linkType>CornerFiller</linkType>
+      <linkFlags>
+        <li>Wall</li>
+        <li>Rock</li>
+      </linkFlags>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+        <edgeTop>Damage/Edge</edgeTop>
+        <edgeBot>Damage/Edge</edgeBot>
+        <edgeLeft>Damage/Edge</edgeLeft>
+        <edgeRight>Damage/Edge</edgeRight>
+      </damageData>
     </graphicData>
+		<uiIconPath>Things/Building/Ship/BeamSingle</uiIconPath>
     <altitudeLayer>Building</altitudeLayer>
     <passability>Impassable</passability>
     <blockWind>true</blockWind>
@@ -189,22 +205,33 @@
     </statBases>
     <tickerType>Normal</tickerType>
     <designationCategory>Ship</designationCategory>
+    <placingDraggableDimensions>1</placingDraggableDimensions>
     <comps>
       <li Class="CompProperties_Power">
         <compClass>CompPowerTransmitter</compClass>
         <transmitsPower>true</transmitsPower>
       </li>
       <li Class="CompProperties_ShipPart"/>
+			<li Class="CompProperties_DefaultStuff">
+				<defaultStuff>Plasteel</defaultStuff>
+			</li>
+		  <li Class="CompProperties_RoofMe"/>
     </comps>
     <placeWorkers>
-      <li>PlaceWorker_NotUnderRoof</li>
+      <li>PlaceWorker_NotUnderNonShipRoof</li>
     </placeWorkers>
     <building>
       <shipPart>true</shipPart>
+      <blueprintGraphicData>
+        <texPath>Things/Building/Linked/Wall_Blueprint_Atlas</texPath>
+      </blueprintGraphicData>
     </building>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>30</costStuffCount>
     <costList>
       <Steel>40</Steel>
-      <Plasteel>30</Plasteel>
       <ComponentSpacer>1</ComponentSpacer>
       <ComponentIndustrial>1</ComponentIndustrial>
     </costList>
@@ -276,7 +303,297 @@
     <designationHotKey>Misc2</designationHotKey>
   </ThingDef>
 
-	<ThingDef ParentName="BuildingBase" Name="AutocannonTurret">
+
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>ShipInside_SolarGenerator</defName>
+    <label>solar generator</label>
+    <description>Produces electricity from sunlight. Does not work in the dark or under artificial light.</description>
+    <thingClass>Building</thingClass>
+		<graphicData>
+      <texPath>Things/Building/Linked/ShipBeam</texPath>
+      <graphicClass>Graphic_Appearances</graphicClass>
+      <linkType>CornerFiller</linkType>
+      <linkFlags>
+        <li>Wall</li>
+        <li>Rock</li>
+      </linkFlags>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+        <edgeTop>Damage/Edge</edgeTop>
+        <edgeBot>Damage/Edge</edgeBot>
+        <edgeLeft>Damage/Edge</edgeLeft>
+        <edgeRight>Damage/Edge</edgeRight>
+      </damageData>
+    </graphicData>
+		<uiIconPath>Things/Building/Ship/BeamSolar</uiIconPath>
+    <rotatable>true</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Impassable</passability>
+    <blockWind>true</blockWind>
+    <fillPercent>1</fillPercent>
+    <blockLight>true</blockLight>
+    <canOverlapZones>false</canOverlapZones>
+    <castEdgeShadows>true</castEdgeShadows>
+    <tickerType>Normal</tickerType>
+    <statBases>
+      <WorkToBuild>8000</WorkToBuild>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+    </statBases>
+    <selectable>true</selectable>
+    <costList>
+      <Steel>200</Steel>
+      <ComponentIndustrial>10</ComponentIndustrial>
+      <ComponentSpacer>5</ComponentSpacer>
+    </costList>
+    <building>
+      <shipPart>true</shipPart>
+      <blueprintGraphicData>
+        <texPath>Things/Building/Linked/Wall_Blueprint_Atlas</texPath>
+      </blueprintGraphicData>
+    </building>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerPlantSolarShip</compClass>
+        <basePowerConsumption>-1</basePowerConsumption>
+        <transmitsPower>true</transmitsPower>
+      </li>
+			<li Class="CompProperties_Unfold">
+				<extendRate>0.005</extendRate>
+				<retractRate>0.0025</retractRate>
+        <retractTime>750</retractTime>
+				<extendDirection>(0,0,-1)</extendDirection>
+				<startOffset>0.5</startOffset>
+				<length>3.0</length>
+	      <graphicPath>Things/Building/Ship/SolarExpand</graphicPath>
+			</li>
+      <li Class="CompProperties_Breakdownable"/>
+			<li Class="CompProperties_DefaultStuff">
+				<defaultStuff>Plasteel</defaultStuff>
+			</li>
+    </comps>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <placeWorkers>
+      <li>PlaceWorker_SolarShip</li>
+    </placeWorkers>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <designationCategory>Ship</designationCategory>
+    <designationHotKey>Misc5</designationHotKey>
+    <researchPrerequisites>
+      <li>Electricity</li>
+      <li>SolarPanels</li>
+    </researchPrerequisites>
+    <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+  </ThingDef>
+
+	<ThingDef ParentName="BuildingBase">
+    <defName>ShipInside_PassiveCooler</defName>
+    <label>ship radiator</label>
+    <description>A radiator to remove heat from a ship. Pumps a lot of heat out into the void.</description>
+    <thingClass>Building_Radiator</thingClass>
+    <category>Building</category>
+		<graphicData>
+      <texPath>Things/Building/Linked/ShipBeam</texPath>
+      <graphicClass>Graphic_Appearances</graphicClass>
+      <linkType>CornerFiller</linkType>
+      <linkFlags>
+        <li>Wall</li>
+        <li>Rock</li>
+      </linkFlags>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+        <edgeTop>Damage/Edge</edgeTop>
+        <edgeBot>Damage/Edge</edgeBot>
+        <edgeLeft>Damage/Edge</edgeLeft>
+        <edgeRight>Damage/Edge</edgeRight>
+      </damageData>
+    </graphicData>
+    <uiIconPath>Things/Building/Ship/BeamRadiator</uiIconPath>
+    <size>(1,1)</size>
+    <rotatable>true</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Impassable</passability>
+    <blockWind>true</blockWind>
+    <fillPercent>1</fillPercent>
+    <blockLight>true</blockLight>
+    <canOverlapZones>false</canOverlapZones>
+    <castEdgeShadows>true</castEdgeShadows>
+    <tickerType>Normal</tickerType>
+    <statBases>
+      <WorkToBuild>8000</WorkToBuild>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+    </statBases>
+    <selectable>true</selectable>
+    <costList>
+      <Steel>200</Steel>
+      <ComponentIndustrial>10</ComponentIndustrial>
+      <ComponentSpacer>5</ComponentSpacer>
+    </costList>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <resourcesFractionWhenDeconstructed>0.5</resourcesFractionWhenDeconstructed>
+    <placeWorkers>
+      <li>PlaceWorker_Radiator</li>
+    </placeWorkers>
+    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+    <comps>
+			<li Class="CompProperties_Power">
+				<compClass>CompPowerTrader</compClass>
+				<basePowerConsumption>200</basePowerConsumption>
+			</li>
+			<li Class="CompProperties_Flickable"/>
+			<li Class="CompProperties_TempControl">
+				<energyPerSecond>-21</energyPerSecond>
+			</li>
+			<li Class="CompProperties_Unfold">
+				<extendRate>0.005</extendRate>
+				<retractRate>0.0025</retractRate>
+        <retractTime>750</retractTime>
+				<extendDirection>(0,0,-1)</extendDirection>
+				<startOffset>0.5</startOffset>
+				<length>3.0</length>
+	      <graphicPath>Things/Building/Ship/Radiator</graphicPath>
+			</li>
+			<li Class="CompProperties_Overlay">
+				<graphicPath>Things/Building/Ship/RadiatorVent</graphicPath>
+				<size>(1,1,1)</size>
+			</li>
+			<li Class="CompProperties_DefaultStuff">
+				<defaultStuff>Plasteel</defaultStuff>
+			</li>
+    </comps>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>50</costStuffCount>
+    <designationCategory>Ship</designationCategory>
+    <designationHotKey>Misc2</designationHotKey>
+    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
+    <researchPrerequisites>
+      <li>ShipBasics</li>
+      <li>AirConditioning</li>
+    </researchPrerequisites>
+		<building>
+			<shipPart>true</shipPart>
+      <blueprintGraphicData>
+        <texPath>Things/Building/Linked/Wall_Blueprint_Atlas</texPath>
+      </blueprintGraphicData>
+		</building>
+  </ThingDef>
+
+	<ThingDef ParentName="BuildingBase">
+    <defName>ShipInside_Turret_MiniTurret</defName>
+    <label>mini-turret</label>
+    <description>A portable automatic turret. Requires steel to refurbish its barrel after heavy use. May explode when damaged. Its dumb AI brain can't be directly controlled, so beware of friendly fire.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Ship/BeamSingle</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <rect>(0.2,0.2,0.6,0.6)</rect>
+      </damageData>
+      <shadowData>
+        <volume>(0.27,0.25,0.27)</volume>
+        <offset>(0,0,0)</offset>
+      </shadowData>
+    </graphicData>
+    <uiIconPath>Things/Building/Security/TurretMini_MenuIcon</uiIconPath>
+    <uiIconScale>0.90</uiIconScale>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <altitudeLayer>Building</altitudeLayer>
+    <stealable>false</stealable>
+    <rotatable>false</rotatable>
+    <thingCategories>
+      <li>BuildingsSecurity</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>120</MaxHitPoints>
+      <Flammability>0.7</Flammability>
+      <WorkToBuild>3500</WorkToBuild>
+      <Mass>10</Mass>
+      <Beauty>-20</Beauty>
+      <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+    </statBases>
+    <tickerType>Normal</tickerType>
+    <comps>
+      <li Class="CompProperties_Explosive">
+        <explosiveRadius>3.9</explosiveRadius>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+        <chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+      </li>
+      <li Class="CompProperties_Forbiddable"/>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>80</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable"/>
+      <li Class="CompProperties_Breakdownable"/>
+      <li Class="CompProperties_Refuelable">
+        <fuelLabel>Shots until barrel change</fuelLabel>
+        <fuelGizmoLabel>Barrel durability</fuelGizmoLabel>
+        <fuelFilter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </fuelFilter>
+        <fuelCapacity>120</fuelCapacity>
+        <initialFuelPercent>1</initialFuelPercent>
+        <autoRefuelPercent>0.75</autoRefuelPercent>
+        <showFuelGizmo>true</showFuelGizmo>
+        <minimumFueledThreshold>1</minimumFueledThreshold>
+        <fuelMultiplier>3</fuelMultiplier>
+        <factorByDifficulty>true</factorByDifficulty>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+        <outOfFuelMessage>Cannot shoot: Needs new barrel</outOfFuelMessage>
+        <fuelIconPath>UI/Overlays/Barrel</fuelIconPath>
+      </li>
+    </comps>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.4</fillPercent>
+    <hasTooltip>true</hasTooltip>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <costStuffCount>60</costStuffCount>
+    <costList>
+      <Steel>40</Steel>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costList>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Ship</designationCategory>
+    <specialDisplayRadius>24.9</specialDisplayRadius>
+    <constructionSkillPrerequisite>5</constructionSkillPrerequisite>
+    <building>
+      <shipPart>true</shipPart>
+			<ai_combatDangerous>true</ai_combatDangerous>
+      <turretGunDef>Gun_MiniTurret</turretGunDef>
+      <turretBurstCooldownTime>4.8</turretBurstCooldownTime>
+      <turretTopGraphicPath>Things/Building/Security/TurretMini_Top</turretTopGraphicPath>
+    </building>
+    <placeWorkers>
+      <li>PlaceWorker_TurretTop</li>
+    </placeWorkers>
+    <designationHotKey>Misc2</designationHotKey>
+    <researchPrerequisites>
+      <li>ShipBasics</li>
+      <li>GunTurrets</li>
+    </researchPrerequisites>
+  </ThingDef>
+
+	<ThingDef ParentName="BuildingBase" Name="ShipInside_AutocannonTurret">
     <defName>ShipInside_Turret_Autocannon</defName>
     <label>autocannon turret</label>
     <description>A heavy automatic turret. Its large-caliber shells do heavy damage over significant ranges, but its barrel must be refurbished after use. It cannot fire at close-up targets, and may explode when damaged.</description>
@@ -367,6 +684,7 @@
     </placeWorkers>
     <designationHotKey>Misc3</designationHotKey>
     <researchPrerequisites>
+      <li>ShipBasics</li>
       <li>HeavyTurrets</li>
     </researchPrerequisites>
     <uiIconScale>0.95</uiIconScale>

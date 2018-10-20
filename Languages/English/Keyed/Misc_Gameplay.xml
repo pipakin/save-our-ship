@@ -3,5 +3,10 @@
 
 	<MustPlaceInsideShipFramework>Must place in a room bordered only by ship parts.</MustPlaceInsideShipFramework>
 	<MustPlaceInsideShip>Must place inside a fully enclosed ship hull.</MustPlaceInsideShip>
-
+	<UnfoldStatus>Status:</UnfoldStatus>
+	<UnfoldExtending>Extending...</UnfoldExtending>
+	<UnfoldRetracting>Retracting...</UnfoldRetracting>
+	<UnfoldRetracted>Retracted</UnfoldRetracted>
+	<UnfoldExtended>Extended</UnfoldExtended>
+	<MustPlaceSolarShipWithFreeSpaces>Must place extendable solar panel with free space.</MustPlaceSolarShipWithFreeSpaces>
 </LanguageData>

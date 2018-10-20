@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace Rimworld
+namespace RimWorld
 {
   public class RoomRoleWorker_ShipFramework : RoomRoleWorker
   {
