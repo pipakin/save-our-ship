@@ -329,7 +329,7 @@
         <edgeRight>Damage/Edge</edgeRight>
       </damageData>
     </graphicData>
-		<uiIconPath>Things/Building/Ship/BeamSolar</uiIconPath>
+		<uiIconPath>Things/Building/Ship/BeamSolarUI</uiIconPath>
     <rotatable>true</rotatable>
     <altitudeLayer>Building</altitudeLayer>
     <passability>Impassable</passability>
@@ -418,7 +418,7 @@
         <edgeRight>Damage/Edge</edgeRight>
       </damageData>
     </graphicData>
-    <uiIconPath>Things/Building/Ship/BeamRadiator</uiIconPath>
+    <uiIconPath>Things/Building/Ship/BeamRadiatorUI</uiIconPath>
     <size>(1,1)</size>
     <rotatable>true</rotatable>
     <altitudeLayer>Building</altitudeLayer>

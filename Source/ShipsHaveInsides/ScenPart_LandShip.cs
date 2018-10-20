@@ -202,7 +202,14 @@ namespace RimWorld
                 for (int z = (int)this.lowCorner.z - 2; z <= this.highCorner.z + 2; ++z)
                 {
                     position = new IntVec3(x, 0, z);
-                    ((FogGrid)map.fogGrid).Unfog(position);
+                    try
+                    {
+                        ((FogGrid)map.fogGrid).Unfog(position);
+                    }
+                    catch (Exception e)
+                    {
+                        ShipInteriorMod.Log("Whoops, couldn't unfog: " + e.Message);
+                    }
                 }
             }
             //Faction allFaction = (((FactionManager)Current.Game.World.factionManager).AllFactions as IList<Faction>)[GenCollection.FirstIndexOf<Faction>(((FactionManager)Current.Game.World.factionManager).AllFactions, (theFac => theFac.IsPlayer))];

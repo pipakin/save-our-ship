@@ -17,6 +17,7 @@ namespace RimWorld
             {
             loc2,loc3,loc4
             }, GenTemperature.ColorSpotHot);
+
         }
 
         public override AcceptanceReport AllowsPlacing(BuildableDef def, IntVec3 center, Rot4 rot, Map map, Thing thingToIgnore = null)
