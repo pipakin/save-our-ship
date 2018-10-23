@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<TerrainDef>
+		<defName>HardVacuum</defName>
+		<label>space</label>
+		<texturePath>Things/Building/Ship/Space</texturePath>
+		<edgeType>Hard</edgeType>
+		<renderPrecedence>340</renderPrecedence>
+    <pathCost>50</pathCost>
+    <statBases>
+      <Beauty>-1</Beauty>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+    </affordances>
+    <tags>
+      <li>Water</li>
+    </tags>
+    <generatedFilth>Filth_RubbleRock</generatedFilth>
+    <fertility>0.0</fertility>
+    <takeFootprints>False</takeFootprints>
+  </TerrainDef>
+
+  <TerrainDef ParentName="FloorBase">
+		<defName>GravityPlating</defName>
+		<label>gravity plating</label>
+		<texturePath>Things/Building/Ship/Space</texturePath>
+		<edgeType>Hard</edgeType>
+		<renderPrecedence>340</renderPrecedence>
+    <pathCost>0</pathCost>
+    <statBases>
+      <Beauty>0</Beauty>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+    </affordances>
+    <fertility>0.0</fertility>
+    <takeFootprints>False</takeFootprints>
+  </TerrainDef>
+
+</Defs>

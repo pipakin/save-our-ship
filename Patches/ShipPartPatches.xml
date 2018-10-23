@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+  <Operation Class="PatchOperationReplace">
+    <!-- Change the placeworker so the ship engine can be built inside a ship. -->
+    <xpath>//ThingDef[defName = "Ship_Engine"]/placeWorkers</xpath>
+    <value>
+      <placeWorkers>
+        <li>PlaceWorker_NotUnderNonShipRoof</li>
+      </placeWorkers>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationReplace">
+    <!-- Change the placeworker so the ship beam can be built inside a ship. -->
+    <xpath>//ThingDef[defName = "Ship_Beam"]/placeWorkers</xpath>
+    <value>
+      <placeWorkers>
+        <li>PlaceWorker_NotUnderNonShipRoof</li>
+      </placeWorkers>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <!-- Make the ship beam support roofs -->
+    <xpath>//ThingDef[defName = "Ship_Beam"]</xpath>
+    <order>Append</order>
+    <value>
+      <holdsRoof>
+        true
+      </holdsRoof>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>//ThingDef[defName = "CommsConsole"]/comps</xpath>
+    <order>Append</order>
+    <value>
+      <li Class="CompProperties_ShipNavigation" />
+    </value>
+  </Operation>
+
+</Patch>

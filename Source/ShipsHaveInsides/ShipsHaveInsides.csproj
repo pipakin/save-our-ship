@@ -56,13 +56,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building_Radiator.cs" />
-    <Compile Include="CompDefaultStuff.cs" />
-    <Compile Include="CompPowerPlantSolarShip.cs" />
-    <Compile Include="CompProperties_Overlay.cs" />
-    <Compile Include="CompProperties_DefaultStuff.cs" />
-    <Compile Include="CompProperties_RoofMe.cs" />
-    <Compile Include="CompProperties_Unfold.cs" />
-    <Compile Include="CompRoofMe.cs" />
+    <Compile Include="ComponentProperties\CompProperties_ShipNavigation.cs" />
+    <Compile Include="Components\CompDefaultStuff.cs" />
+    <Compile Include="Components\CompPowerPlantSolarShip.cs" />
+    <Compile Include="ComponentProperties\CompProperties_Overlay.cs" />
+    <Compile Include="ComponentProperties\CompProperties_DefaultStuff.cs" />
+    <Compile Include="ComponentProperties\CompProperties_RoofMe.cs" />
+    <Compile Include="ComponentProperties\CompProperties_Unfold.cs" />
+    <Compile Include="Components\CompRoofMe.cs" />
+    <Compile Include="Components\ShipNavigationComponent.cs" />
+    <Compile Include="GenerateSpaceSubMesh.cs" />
+    <Compile Include="HideLightingLayersInSpace.cs" />
     <Compile Include="Mod\AllowHullUnderDoor.cs" />
     <Compile Include="Mod\DontBlockHullUnderDoor.cs" />
     <Compile Include="Mod\FindAllTheShipParts.cs" />
@@ -71,17 +75,21 @@
     <Compile Include="Mod\RecoverPawnAfterExit.cs" />
     <Compile Include="Mod\SaveShip.cs" />
     <Compile Include="Mod\ShipInteriorMod.cs" />
-    <Compile Include="OverlayComponent.cs" />
+    <Compile Include="Components\OverlayComponent.cs" />
     <Compile Include="PlaceWorker_NotUnderNonShipRoof.cs" />
     <Compile Include="Placeworker_SolarShip.cs" />
-    <Compile Include="UnfoldComponent.cs" />
+    <Compile Include="Components\UnfoldComponent.cs" />
     <Compile Include="PlaceWorker_InsideShipRoom.cs" />
     <Compile Include="PlaceWorker_InsideStarship.cs" />
     <Compile Include="Placeworker_Radiator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderPlanetBehindMap.cs" />
     <Compile Include="RoomRoleWorker_ShipFramework.cs" />
     <Compile Include="RoomRoleWorker_ShipInside.cs" />
+    <Compile Include="RoomStatWorkers\RoomStatWorker_Oxygen.cs" />
     <Compile Include="ScenPart_LandShip.cs" />
+    <Compile Include="Utilities\MapScanner.cs" />
+    <Compile Include="Utilities\ThingMutator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,7 +10,10 @@ namespace RimWorld
         private static readonly Vector2 BarSize = new Vector2(0.3f, 0.07f);
         private static readonly Material PowerPlantSolarBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.5f, 0.475f, 0.1f), false);
         private static readonly Material PowerPlantSolarBarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f), false);
-        private const float FullSunPower = 800f;
+        private static float FullSunPower
+        {
+            get { return ShipsHaveInsides.Mod.ShipInteriorMod.instance.shipSolarPanelOutput.Value; }
+        }
         private const float NightPower = 0.0f;
 
         protected override float DesiredPowerOutput

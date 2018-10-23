@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using ShipsHaveInsides.Utilities;
 using System.Collections.Generic;
 using Verse;
 
@@ -11,20 +12,13 @@ namespace RimWorld
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-            ((RoofGrid)((Thing)this.parent).Map.roofGrid).SetRoof(((Thing)this.parent).Position, DefDatabase<RoofDef>.GetNamed("RoofShip", true));
+            parent.Map.roofGrid.SetRoof(parent.Position, DefDatabase<RoofDef>.GetNamed("RoofShip", true));
+            parent.Map.terrainGrid.SetTerrain(parent.Position, DefDatabase<TerrainDef>.GetNamed("GravityPlating", true));
             List<Thing> thingList1 = ((ThingGrid)((Thing)this.parent).Map.thingGrid).ThingsListAt(((Thing)this.parent).Position);
-            List<Thing> thingList2 = new List<Thing>();
-            using (List<Thing>.Enumerator enumerator = thingList1.GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                {
-                    Thing current = enumerator.Current;
-                    if (current is Plant)
-                        thingList2.Add(current);
-                }
-            }
-            for (int index = 0; index < thingList2.Count; ++index)
-                ((Entity)thingList2[index]).DeSpawn();
+            new ThingMutator<Thing>()
+                .DeSpawn<Plant>()
+                .Destroy<Building_SteamGeyser>()
+                .UnsafeExecute(thingList1);
 
             position = parent.Position;
         }
@@ -42,6 +36,7 @@ namespace RimWorld
             }
             
             map.roofGrid.SetRoof(position.Value, null);
+            map.terrainGrid.SetTerrain(position.Value, TerrainDefOf.Gravel);
             position = null;
         }
     }

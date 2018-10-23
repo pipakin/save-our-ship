@@ -9,4 +9,6 @@
 	<UnfoldRetracted>Retracted</UnfoldRetracted>
 	<UnfoldExtended>Extended</UnfoldExtended>
 	<MustPlaceSolarShipWithFreeSpaces>Must place extendable solar panel with free space.</MustPlaceSolarShipWithFreeSpaces>
+	<ShipInsideOrbit>Orbit</ShipInsideOrbit>
+	<ShipInsideOrbitDesc>Launch the ship to orbit. Doesn't require cryptocaskets, but the doors should probably be closed and locked.</ShipInsideOrbitDesc>
 </LanguageData>

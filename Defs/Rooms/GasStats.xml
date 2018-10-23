@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RoomStatDef>
+    <defName>Oxygen</defName>
+    <label>oxygen</label>
+    <workerClass>RoomStatWorker_Oxygen</workerClass>
+    <updatePriority>1</updatePriority>
+    <displayRounded>true</displayRounded>
+    <roomlessScore>0</roomlessScore>
+    <scoreStages>
+      <li>
+        <label>none</label>
+      </li>
+      <li>
+        <minScore>1</minScore>
+        <label>insufficient</label>
+      </li>
+      <li>
+        <minScore>6</minScore>
+        <label>dangerously low</label>
+      </li>
+      <li>
+        <minScore>10</minScore>
+        <label>very low</label>
+      </li>
+      <li>
+        <minScore>16</minScore>
+        <label>low</label>
+      </li>
+      <li>
+        <minScore>19</minScore>
+        <label>good</label>
+      </li>
+      <li>
+        <minScore>24</minScore>
+        <label>toxic</label>
+      </li>
+      <li>
+        <minScore>26</minScore>
+        <label>dangerously toxic</label>
+      </li>
+      <li>
+        <minScore>30</minScore>
+        <label>deadly toxic</label>
+      </li>
+    </scoreStages>
+  </RoomStatDef>
+
+</Defs>

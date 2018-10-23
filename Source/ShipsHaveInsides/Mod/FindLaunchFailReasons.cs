@@ -20,6 +20,13 @@ namespace ShipsHaveInsides.Mod
         {
             __result = new List<string>();
             List<Building> shipParts = ShipUtility.ShipBuildingsAttachedTo(rootBuilding);
+
+            if(shipParts.Count == 0)
+            {
+                __result.Add("Checking ship. Please wait...");
+                return;
+            }
+
             if (!FindLaunchFailReasons.FindEitherThing(shipParts, (ThingDef)ThingDefOf.Ship_CryptosleepCasket, ThingDef.Named("ShipInside_CryptosleepCasket")))
                 __result.Add(Translator.Translate("ShipReportMissingPart") + ": " + (string)((Def)ThingDefOf.Ship_CryptosleepCasket).label);
             if (!FindLaunchFailReasons.FindTheThing(shipParts, (ThingDef)ThingDefOf.Ship_ComputerCore))

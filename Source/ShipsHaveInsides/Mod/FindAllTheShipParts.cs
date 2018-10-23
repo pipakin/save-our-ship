@@ -1,19 +1,28 @@
 ﻿using Harmony;
 using RimWorld;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Verse;
+using System.Threading;
 
 namespace ShipsHaveInsides.Mod
 {
     [HarmonyPatch(typeof(ShipUtility), "ShipBuildingsAttachedTo", null)]
     public static class FindAllTheShipParts
     {
+        
         [HarmonyPrefix]
         public static bool DisableOriginalMethod()
         {
             return false;
         }
+
+        private static Mutex mutex = new Mutex();
+        private static string ThingGeneratedFor;
+        private static HashSet<Building> set;
+        private static string ThingGettingFor;
+
 
         [HarmonyPostfix]
         public static void FindShipPartsReally(Building root, ref List<Building> __result)
@@ -24,64 +33,79 @@ namespace ShipsHaveInsides.Mod
             }
             else
             {
-                ShipInteriorMod.closedSet.Clear();
-                ShipInteriorMod.openSet.Clear();
-                ShipInteriorMod.openSet.Add(root);
-                while (ShipInteriorMod.openSet.Count > 0)
+                try
                 {
-                    Building open = ShipInteriorMod.openSet[ShipInteriorMod.openSet.Count - 1];
-                    ShipInteriorMod.openSet.Remove(open);
-                    ShipInteriorMod.closedSet.Add(open);
-                    using (IEnumerator<IntVec3> enumerator1 = GenAdj.CellsAdjacentCardinal((Thing)open).GetEnumerator())
+                    mutex.WaitOne();
+                    if (ThingGeneratedFor == root.ThingID)
                     {
-                        while (((IEnumerator)enumerator1).MoveNext())
+
+                        __result = set.ToList();
+                    }
+                    else if (ThingGeneratedFor != null)
+                    {
+                        ThingGeneratedFor = null;
+                        __result = new List<Building>();
+                    }
+                    else
+                    {
+                        __result = new List<Building>();
+                    }
+                    if (ThingGettingFor == root.ThingID)
+                    {
+                        return;
+                    }
+                    ThingGettingFor = root.ThingID;
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
+
+                ThreadPool.QueueUserWorkItem(s =>
+                {
+                    Building id = s as Building;
+
+                    HashSet<Building> closedSet = new HashSet<Building>();
+                    HashSet<Building> openSet = new HashSet<Building>();
+                    openSet.Add(id);
+
+                    while (openSet.Count > 0)
+                    {
+                        Building open = openSet.First();
+                        openSet.Remove(open);
+                        closedSet.Add(open);
+
+                        foreach (var current1 in GenAdj.CellsAdjacentCardinal(open))
                         {
-                            IntVec3 current1 = enumerator1.Current;
-                            Building edifice = GridsUtility.GetEdifice(current1, ((Thing)open).Map);
-                            if (edifice != null && ((BuildingProperties)((ThingDef)((Thing)edifice).def).building).shipPart && !ShipInteriorMod.closedSet.Contains(edifice) && !ShipInteriorMod.openSet.Contains(edifice))
+                            List<Building> buildings = GridsUtility.GetThingList(current1, open.Map)
+                                .OfType<Building>()
+                                .ToList();
+
+                            if (buildings.Any(b => b.def.building.shipPart) && !closedSet.Contains(buildings.First(b => b.def.building.shipPart)))
                             {
-                                ShipInteriorMod.openSet.Add(edifice);
+                                openSet.Add(buildings.First(b => b.def.building.shipPart));
+                                buildings.Remove(buildings.First(b => b.def.building.shipPart));
                             }
-                            else
-                            {
-                                bool flag = false;
-                                using (List<Thing>.Enumerator enumerator2 = GridsUtility.GetThingList(current1, ((Thing)open).Map).GetEnumerator())
-                                {
-                                    while (enumerator2.MoveNext())
-                                    {
-                                        Thing current2 = enumerator2.Current;
-                                        if (current2 is Building)
-                                        {
-                                            Building building = current2 as Building;
-                                            if (((BuildingProperties)((ThingDef)((Thing)building).def).building).shipPart && !ShipInteriorMod.closedSet.Contains(building) && !ShipInteriorMod.openSet.Contains(building))
-                                            {
-                                                ShipInteriorMod.openSet.Add(building);
-                                                flag = true;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (flag)
-                                {
-                                    using (List<Thing>.Enumerator enumerator2 = GridsUtility.GetThingList(current1, ((Thing)open).Map).GetEnumerator())
-                                    {
-                                        while (enumerator2.MoveNext())
-                                        {
-                                            Thing current2 = enumerator2.Current;
-                                            if (current2 is Building)
-                                            {
-                                                Building building = current2 as Building;
-                                                if (!ShipInteriorMod.closedSet.Contains(building) && !ShipInteriorMod.openSet.Contains(building))
-                                                    ShipInteriorMod.closedSet.Add(building);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            closedSet.AddRange(buildings);
+                        }
+                        openSet.ExceptWith(closedSet);
+                    }
+
+                    try
+                    {
+                        mutex.WaitOne();
+                        if (ThingGettingFor == id.ThingID)
+                        {
+                            set = closedSet;
+                            ThingGeneratedFor = id.ThingID;
+                            ThingGettingFor = null;
                         }
                     }
-                }
-                __result = ShipInteriorMod.closedSet;
+                    finally
+                    {
+                        mutex.ReleaseMutex();
+                    }
+            }, root);
             }
         }
     }

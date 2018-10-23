@@ -36,8 +36,9 @@ namespace RimWorld
             base.DrawGhost(center, rot, thingDef, ghostCol, drawAltitude);
 
             GraphicDatabase.Get<Graphic_Single>(graphicPath, ShaderTypeDefOf.EdgeDetect.Shader, new Vector2(1, 3), ghostCol)
-                .DrawFromDef(GenThing.TrueCenter(center, rot, thingDef.Size, drawAltitude.AltitudeFor()) + (IntVec3.South * 2).ToVector3(), rot, thingDef);
+                .DrawFromDef(GenThing.TrueCenter(center, rot, thingDef.Size, drawAltitude.AltitudeFor()) + (IntVec3.South * 2).RotatedBy(rot).ToVector3(), rot, thingDef);
 
+            
         }
     }
 }
