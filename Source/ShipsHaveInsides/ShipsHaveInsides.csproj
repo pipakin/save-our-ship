@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AirShipWorldObject.cs" />
     <Compile Include="Building_Radiator.cs" />
     <Compile Include="ComponentProperties\CompProperties_ShipNavigation.cs" />
     <Compile Include="Components\CompDefaultStuff.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Components\CompRoofMe.cs" />
     <Compile Include="Components\ShipNavigationComponent.cs" />
     <Compile Include="GenerateSpaceSubMesh.cs" />
+    <Compile Include="GenStep_MakeSpace.cs" />
     <Compile Include="HideLightingLayersInSpace.cs" />
     <Compile Include="Mod\AllowHullUnderDoor.cs" />
     <Compile Include="Mod\DontBlockHullUnderDoor.cs" />

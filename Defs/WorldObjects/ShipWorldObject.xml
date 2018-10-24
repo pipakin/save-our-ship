@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <WorldObjectDef>
+    <defName>AirShip</defName>
+    <label>atmospheric ship</label>
+    <description>A ship flying in the atmosphere.</description>
+    <worldObjectClass>AirShipWorldObject</worldObjectClass>
+    <texture>World/WorldObjects/Caravan</texture>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/Ship</expandingIconTexture>
+    <expandingIconPriority>100</expandingIconPriority>
+    <expandMore>true</expandMore>
+    <allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
+    <inspectorTabs>
+    </inspectorTabs>
+  </WorldObjectDef>
+
+    <WorldObjectDef>
+      <defName>OrbitShip</defName>
+      <label>orbiting ship</label>
+      <description>A ship flying in geostationary orbit.</description>
+      <worldObjectClass>AirShipWorldObject</worldObjectClass>
+      <texture>World/WorldObjects/Caravan</texture>
+      <useDynamicDrawer>true</useDynamicDrawer>
+      <expandingIcon>true</expandingIcon>
+      <expandingIconTexture>World/WorldObjects/Expanding/Ship</expandingIconTexture>
+      <expandingIconPriority>100</expandingIconPriority>
+      <expandMore>true</expandMore>
+      <allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
+      <inspectorTabs>
+      </inspectorTabs>
+    </WorldObjectDef>
+
+</Defs>

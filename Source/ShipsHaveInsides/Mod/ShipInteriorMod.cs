@@ -38,6 +38,9 @@ namespace ShipsHaveInsides.Mod
         public SettingHandle<int> minTravelTime;
         public SettingHandle<int> maxTravelTime;
         public SettingHandle<bool> leaveCryptosleepBug;
+        public SettingHandle<int> meteorMinCount;
+        public SettingHandle<int> meteorMaxCount;
+        public SettingHandle<int> meteorSizeMultiplier;
 
         public override void DefsLoaded()
         {
@@ -47,6 +50,9 @@ namespace ShipsHaveInsides.Mod
             minTravelTime = Settings.GetHandle("minTravelTime", "Minimum Travel Time", "Minimum amount of years that pass when travelling via ship.", 1);
             maxTravelTime = Settings.GetHandle("maxTravelTime", "Maximum Travel Time", "Maximum amount of years that pass when travelling via ship.", 100);
             leaveCryptosleepBug = Settings.GetHandle("leaveCryptosleepBug", "Leave Cryptosleeps Bugged", "This one's for you, Nimble.", false);
+            meteorMinCount = Settings.GetHandle("meteorMinCount", "Minimum Meteors", "Minimum number of meteors to generate in space.", 3);
+            meteorMaxCount = Settings.GetHandle("meteorMaxCount", "Maximem Meteors", "Maximum number of meteors to generate in space.", 8);
+            meteorSizeMultiplier = Settings.GetHandle("meteorSizeMultiplier", "Meteor Size Multiplier", "Controls Meteor size.", 4);
         }
     }
 }

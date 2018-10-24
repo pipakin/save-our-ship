@@ -16,15 +16,12 @@
       <li>Medium</li>
       <li>Heavy</li>
     </affordances>
-    <tags>
-      <li>Water</li>
-    </tags>
     <generatedFilth>Filth_RubbleRock</generatedFilth>
     <fertility>0.0</fertility>
     <takeFootprints>False</takeFootprints>
   </TerrainDef>
 
-  <TerrainDef ParentName="FloorBase">
+  <TerrainDef>
 		<defName>GravityPlating</defName>
 		<label>gravity plating</label>
 		<texturePath>Things/Building/Ship/Space</texturePath>
