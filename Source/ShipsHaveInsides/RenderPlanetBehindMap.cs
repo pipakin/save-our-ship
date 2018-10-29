@@ -18,6 +18,8 @@ namespace ShipsHaveInsides.Mod
         const int textureSize = 2048;
         const float altitude = 1100f;
 
+        static int framesTillUpdate = 0;
+
         [HarmonyPrefix]
         public static void PreDraw()
         {
@@ -29,6 +31,14 @@ namespace ShipsHaveInsides.Mod
             {
                 return;
             }
+
+            if(framesTillUpdate > 0)
+            {
+                framesTillUpdate--;
+                return;
+            }
+
+            framesTillUpdate = ShipInteriorMod.instance.framesBetweenPlanetUpdates.Value;
 
             RenderTexture oldTexture = Find.WorldCamera.targetTexture;
             RenderTexture oldSkyboxTexture = RimWorld.Planet.WorldCameraManager.WorldSkyboxCamera.targetTexture;
@@ -43,7 +53,8 @@ namespace ShipsHaveInsides.Mod
             float num = (float)UI.screenWidth / (float)UI.screenHeight;
 
             Find.WorldCameraDriver.Update();
-            Find.World.WorldUpdate();
+            Find.World.renderer.CheckActivateWorldCamera();
+            Find.World.renderer.DrawWorldLayers();
             RimWorld.Planet.WorldCameraManager.WorldSkyboxCamera.targetTexture = target;
             RimWorld.Planet.WorldCameraManager.WorldSkyboxCamera.aspect = num;
             RimWorld.Planet.WorldCameraManager.WorldSkyboxCamera.Render();
@@ -52,30 +63,15 @@ namespace ShipsHaveInsides.Mod
             Find.WorldCamera.aspect = num;
             Find.WorldCamera.Render();
 
-
             RenderTexture.active = target;
             virtualPhoto.ReadPixels(new Rect(0, 0, textureSize, textureSize), 0, 0);
             virtualPhoto.Apply();
             RenderTexture.active = null;
 
-
-            /*
-            Matrix4x4 matrix = new Matrix4x4();
-            Vector3 center = Find.CameraDriver.GetComponent<Camera>().transform.position;
-            float cellsHigh = UI.screenHeight / Find.CameraDriver.CellSizePixels;
-
-            foreach(IntVec3 cell in Find.CameraDriver.CurrentViewRect.Cells)
-            {
-                matrix.SetTRS(new Vector3(center.x, 0.0f, center.z), Quaternion.identity, new Vector3(cellsHigh * num, 1f, cellsHigh));
-                Graphics.DrawMesh(MeshPool.plane10, matrix, MaterialPool.MatFrom(), layer: 0, camera: null, submeshIndex: 0, properties: null, castShadows: true, receiveShadows: false, useLightProbes: false);
-            }
-            */
-
             Find.WorldCamera.targetTexture = oldTexture;
             RimWorld.Planet.WorldCameraManager.WorldSkyboxCamera.targetTexture = oldSkyboxTexture;
             Find.World.renderer.wantedMode = RimWorld.Planet.WorldRenderMode.None;
-            Find.World.WorldUpdate();
-
+            Find.World.renderer.CheckActivateWorldCamera();
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using RimWorld;
+using ShipsHaveInsides.Mod;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Verse;
 
 namespace ShipsHaveInsides.Utilities
@@ -11,6 +13,7 @@ namespace ShipsHaveInsides.Utilities
     {
         List<Action<T1>> mutators;
         List<Func<T1, IEnumerable<T1>>> containerExpansion;
+        Action<Exception> exceptionHandler = e => throw new Exception("Exception occured while processing entities", e);
 
         private ThingMutator(IEnumerable<Action<T1>> mutators, IEnumerable<Func<T1, IEnumerable<T1>>> containerExpansion)
         {
@@ -59,15 +62,26 @@ namespace ShipsHaveInsides.Utilities
             });
         }
 
-        public ThingMutator<T1> Destroy<T>() where T: Thing
+        public ThingMutator<T1> Destroy<T>(DestroyMode mode = DestroyMode.Vanish) where T: Thing
         {
             return new ThingMutator<T1>(mutators.Concat(e =>
             {
                 if (e is T)
                 {
                     Thing.allowDestroyNonDestroyable = true;
-                    e.Destroy(DestroyMode.Vanish);
+                    e.Destroy(mode);
                     Thing.allowDestroyNonDestroyable = false;
+                }
+            }), containerExpansion);
+        }
+
+        public ThingMutator<T1> SetAsHome<T>(Func<T, bool> predicate = null) where T : Thing
+        {
+            return new ThingMutator<T1>(mutators.Concat(e =>
+            {
+                if (e is T && (predicate == null || predicate(e as T)))
+                {
+                    e.Map.areaManager.Home[e.Position] = true;
                 }
             }), containerExpansion);
         }
@@ -79,6 +93,17 @@ namespace ShipsHaveInsides.Utilities
                 if (e is T)
                 {
                     e.DeSpawn();
+                }
+            }), containerExpansion);
+        }
+
+        public ThingMutator<T1> SpawnInto<T>(Func<Map> map) where T : Thing
+        {
+            return new ThingMutator<T1>(mutators.Concat(e =>
+            {
+                if (e is T)
+                {
+                    e.SpawnSetup(map(), false);
                 }
             }), containerExpansion);
         }
@@ -102,6 +127,21 @@ namespace ShipsHaveInsides.Utilities
             }), containerExpansion);
         }
 
+
+        public ThingMutator<T1> ForComp<T>(Action<T> func) where T : ThingComp
+        {
+            return new ThingMutator<T1>(mutators.Concat(e =>
+            {
+                if (typeof(ThingWithComps).IsAssignableFrom(e.GetType()))
+                {
+                    foreach(var comp in (e as ThingWithComps).GetComps<T>())
+                    {
+                        func(comp);
+                    }
+                }
+            }), containerExpansion);
+        }
+
         public ThingMutator<T1> ForContained<T, T2>(Func<T, T1> containedFunc, Action<T2> func)
             where T : class
             where T2 : class
@@ -119,9 +159,9 @@ namespace ShipsHaveInsides.Utilities
             }), containerExpansion);
         }
 
-        public ThingMutator<T1> ExpandContained<T, T2>(Func<T, T1> containedFunc)
+        public ThingMutator<T1> ExpandContained<T, T2>(Func<T, T2> containedFunc)
             where T : class
-            where T2 : class
+            where T2 : T1
         {
             return new ThingMutator<T1>(mutators, containerExpansion.Concat(e =>
             {
@@ -133,40 +173,94 @@ namespace ShipsHaveInsides.Utilities
             }));
         }
 
-        public ThingMutator<T1> ExpandContained<T, T2>(Func<T, IEnumerable<T1>> containedFunc)
+        public ThingMutator<T1> ExpandContained<T, T2>(Func<T, IEnumerable<T2>> containedFunc)
             where T : class
-            where T2 : class
+            where T2 : T1
         {
             return new ThingMutator<T1>(mutators, containerExpansion.Concat(e =>
             {
                 if (e is T)
                 {
-                    return containedFunc(e as T);
+                    return containedFunc(e as T).Select(x => (T1)x);
                 }
                 return new List<T1>();
             }));
         }
 
-        public void UnsafeExecute(IEnumerable<T1> entities)
+
+        public HashSet<T1> UnsafeExecute(IEnumerable<T1> entities)
         {
-            List<T1> entitiesToAdd = new List<T1>();
+            HashSet<T1> allEntities = new HashSet<T1>(entities);
+            HashSet<T1> entitiesToAdd = new HashSet<T1>();
 
             foreach (Func<T1, IEnumerable<T1>> exp in containerExpansion)
             {
-                foreach (T1 e in entities)
+                foreach (T1 e in allEntities)
                 {
-                    entitiesToAdd.AddRange(exp(e));
+                    entitiesToAdd.AddRange(exp(e).ToList());
                 }
+                allEntities.AddRange(entitiesToAdd);
             }
 
-            var list = entities.Concat(entitiesToAdd).ToList();
-
-            foreach (T1 e in list)
+            foreach (T1 e in allEntities)
             {
                 foreach(Action<T1> fn in mutators)
                 {
-                    if(e != null)fn(e);
+                    try
+                    {
+                        if (e != null) fn(e);
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptionHandler(ex);
+                    }
                 }
+            }
+
+            return allEntities;
+        }
+
+        public ThenContainer<T1> QueueAsLongEvent(IEnumerable<T1> entities, string textKey, bool async, Action<Exception> handler)
+        {
+            var items = entities.ToList();
+            var cont = new ThenContainer<T1>();
+            exceptionHandler = handler;
+            LongEventHandler.QueueLongEvent(() =>
+            {
+                ShipInteriorMod.Log(textKey.Translate() + "...");
+                cont.Resolve(UnsafeExecute(items), async);
+            }, textKey, async, handler);
+
+            return cont;
+        }
+
+        public class ThenContainer<TResult> where TResult : Thing
+        {
+            private HashSet<TResult> results;
+            private bool async;
+
+            public void Resolve(HashSet<TResult> results, bool async)
+            {
+                this.results = results;
+                this.async = async;
+            }
+
+            public ThenContainer<TResult> Then(ThingMutator<TResult> mutator, string textKey, Action<Exception> handler)
+            {
+                var cont = new ThenContainer<TResult>();
+                LongEventHandler.QueueLongEvent(() =>
+                {
+                    ShipInteriorMod.Log(textKey.Translate() + "...");
+                    if(results != null)
+                        cont.Resolve(mutator.UnsafeExecute(results), async);
+                }, textKey, async, handler);
+                return cont;
+            }
+
+            public ThenContainer<TResult> Then(Action action, string textKey, Action<Exception> handler)
+            {
+                LongEventHandler.QueueLongEvent(action, textKey, async, handler);
+                return this;
             }
         }
     }

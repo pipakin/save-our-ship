@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>//HediffGiverSetDef[defName = "OrganicStandard"]/hediffGivers</xpath>
+    <order>Append</order>
+    <value>
+      <li Class="HediffGiver_Hypoxia">
+        <hediff>Hypoxia</hediff>
+      </li>
+      <li Class="HediffGiver_Hypercapnia">
+        <hediff>Hypercapnia</hediff>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

@@ -50,10 +50,110 @@
     <constructEffect>ConstructMetal</constructEffect>
     <designationHotKey>Misc1</designationHotKey>
     <researchPrerequisites>
-      <li>PressurizedHull</li>
+      <li>ShipBasics</li>
     </researchPrerequisites>
 	<coversFloor>true</coversFloor>
 	<fillPercent>0.0</fillPercent>
+  </ThingDef>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>ShipLifeSupportVent</defName>
+    <label>life support vent</label>
+    <thingClass>BuildingLifeSupportVent</thingClass>
+    <category>Building</category>
+    <graphicData>
+      <texPath>Things/Building/Ship/HullVent</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <building>
+      <shipPart>true</shipPart>
+    </building>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Standable</passability>
+	<placingDraggableDimensions>2</placingDraggableDimensions>
+    <statBases>
+      <MaxHitPoints>800</MaxHitPoints>
+      <WorkToBuild>900</WorkToBuild>
+      <Flammability>0.0</Flammability>
+      <Beauty>1</Beauty>
+    </statBases>
+    <description>Life Support Vent for distributing atmosphere around the ship. Does not provide O2, only redistributes it. Automatically closes during depressurization.</description>
+    <costList>
+      <Steel>3</Steel>
+      <Plasteel>5</Plasteel>
+    </costList>
+    <comps>
+      <li Class="CompProperties_ShipPart"/>
+		  <li Class="CompProperties_RoofMe"/>
+    </comps>
+    <placeWorkers>
+      <li>PlaceWorker_InsideStarship</li>
+    </placeWorkers>
+    <rotatable>false</rotatable>
+    <selectable>true</selectable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+    <designationCategory>Ship</designationCategory>
+    <constructEffect>ConstructMetal</constructEffect>
+    <designationHotKey>Misc1</designationHotKey>
+    <researchPrerequisites>
+      <li>ShipBasics</li>
+    </researchPrerequisites>
+    <coversFloor>true</coversFloor>
+    <fillPercent>0.0</fillPercent>
+  </ThingDef>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>ShipInside_AirTank</defName>
+    <label>air tank</label>
+    <description>Holds air. Good for breathing.</description>
+    <thingClass>Building</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Ship/AirTank</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+      <shadowData>
+        <volume>(1.0, 0.3, 1.0)</volume>
+      </shadowData>
+    </graphicData>
+    <researchPrerequisites><li>ShipBasics</li></researchPrerequisites>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>70</pathCost>
+    <blockWind>true</blockWind>
+    <fillPercent>0.5</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases>
+      <WorkToBuild>8000</WorkToBuild>
+      <MaxHitPoints>200</MaxHitPoints>
+      <Flammability>0</Flammability>
+    </statBases>
+    <tickerType>Normal</tickerType>
+    <size>(2,2)</size>
+    <designationCategory>Ship</designationCategory>
+    <comps>
+      <li Class="CompProperties_ShipPart"/>
+      <li Class="CompProperties_AirTank">
+        <maxPressure>1000000</maxPressure>
+      </li>
+    </comps>
+    <placeWorkers>
+      <li>PlaceWorker_InsideStarship</li>
+    </placeWorkers>
+    <building>
+      <shipPart>true</shipPart>
+      <isPlayerEjectable>true</isPlayerEjectable>
+    </building>
+    <costList>
+      <Steel>120</Steel>
+			<Uranium>14</Uranium>
+			<ComponentIndustrial>3</ComponentIndustrial>
+      <ComponentSpacer>3</ComponentSpacer>
+    </costList>
+    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
+    <designationHotKey>Misc2</designationHotKey>
   </ThingDef>
 
   <ThingDef ParentName="BuildingBase">
@@ -128,7 +228,7 @@
     <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
     <staticSunShadowHeight>1.0</staticSunShadowHeight>
     <researchPrerequisites>
-      <li>PressurizedHull</li>
+      <li>ShipBasics</li>
     </researchPrerequisites>
     <designationHotKey>Misc1</designationHotKey>
     <holdsRoof>true</holdsRoof>
@@ -192,114 +292,6 @@
     <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
     <designationHotKey>Misc2</designationHotKey>
   </ThingDef>
-
-  <ThingDef ParentName="BuildingBase">
-    <defName>ShipInside_JetEngine</defName>
-    <label>jet engine</label>
-    <description>A jhet engine that can lift your ship into the sky.</description>
-    <thingClass>Building</thingClass>
-    <graphicData>
-      <texPath>Things/Building/Ship/JetEngine</texPath>
-      <graphicClass>Graphic_Multi</graphicClass>
-      <drawSize>(2,3)</drawSize>
-      <shadowData>
-        <volume>(1.7, 1, 2.8)</volume>
-      </shadowData>
-    </graphicData>
-    <researchPrerequisites><li>JetEngines</li></researchPrerequisites>
-    <altitudeLayer>Building</altitudeLayer>
-    <passability>PassThroughOnly</passability>
-    <pathCost>100</pathCost>
-    <blockWind>true</blockWind>
-    <fillPercent>0.8</fillPercent>
-    <canOverlapZones>false</canOverlapZones>
-    <statBases>
-      <WorkToBuild>8000</WorkToBuild>
-      <MaxHitPoints>200</MaxHitPoints>
-      <Flammability>0</Flammability>
-    </statBases>
-    <tickerType>Normal</tickerType>
-    <size>(2,3)</size>
-    <designationCategory>Ship</designationCategory>
-    <hasInteractionCell>true</hasInteractionCell>
-    <interactionCellOffset>(1,0,0)</interactionCellOffset>
-    <comps>
-      <li Class="CompProperties_ShipPart"/>
-      <li Class="CompProperties_Explosive">
-        <explosiveRadius>2</explosiveRadius>
-        <explosiveDamageType>Flame</explosiveDamageType>
-      </li>
-    </comps>
-    <placeWorkers>
-      <li>PlaceWorker_NotUnderNonShipRoof</li>
-    </placeWorkers>
-    <building>
-      <shipPart>true</shipPart>
-      <isPlayerEjectable>true</isPlayerEjectable>
-    </building>
-    <costList>
-      <Steel>350</Steel>
-			<ComponentIndustrial>5</ComponentIndustrial>
-    </costList>
-    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
-    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
-    <designationHotKey>Misc2</designationHotKey>
-  </ThingDef>
-
-  <ThingDef ParentName="BuildingBase">
-    <defName>ShipInside_FuelTank</defName>
-    <label>fuel tank</label>
-    <description>A fuel tank that holds chemfuels at very low tempertaures.</description>
-    <thingClass>Building</thingClass>
-    <graphicData>
-      <texPath>Things/Building/Ship/FuelTank</texPath>
-      <graphicClass>Graphic_Multi</graphicClass>
-      <drawSize>(2,3)</drawSize>
-      <shadowData>
-        <volume>(1.7, 1, 2.8)</volume>
-      </shadowData>
-    </graphicData>
-    <researchPrerequisites><li>JetEngines</li></researchPrerequisites>
-    <altitudeLayer>Building</altitudeLayer>
-    <passability>PassThroughOnly</passability>
-    <pathCost>100</pathCost>
-    <blockWind>true</blockWind>
-    <fillPercent>0.8</fillPercent>
-    <canOverlapZones>false</canOverlapZones>
-    <statBases>
-      <WorkToBuild>8000</WorkToBuild>
-      <MaxHitPoints>200</MaxHitPoints>
-      <Flammability>0</Flammability>
-    </statBases>
-    <tickerType>Normal</tickerType>
-    <size>(2,3)</size>
-    <designationCategory>Ship</designationCategory>
-    <hasInteractionCell>true</hasInteractionCell>
-    <interactionCellOffset>(1,0,0)</interactionCellOffset>
-    <comps>
-      <li Class="CompProperties_ShipPart"/>
-      <li Class="CompProperties_Explosive">
-        <explosiveRadius>8</explosiveRadius>
-        <explosiveDamageType>Flame</explosiveDamageType>
-      </li>
-    </comps>
-    <placeWorkers>
-      <li>PlaceWorker_NotUnderNonShipRoof</li>
-    </placeWorkers>
-    <building>
-      <shipPart>true</shipPart>
-      <isPlayerEjectable>true</isPlayerEjectable>
-    </building>
-    <costList>
-      <Steel>350</Steel>
-			<ComponentIndustrial>5</ComponentIndustrial>
-    </costList>
-    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
-    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
-    <designationHotKey>Misc2</designationHotKey>
-  </ThingDef>
-
-
 
   <ThingDef ParentName="BuildingBase">
     <defName>ShipInside_SolarGenerator</defName>
@@ -385,7 +377,7 @@
     <researchPrerequisites>
       <li>Electricity</li>
       <li>SolarPanels</li>
-      <li>PressurizedHull</li>
+      <li>ShipBasics</li>
     </researchPrerequisites>
     <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
   </ThingDef>
@@ -478,7 +470,7 @@
     <designationHotKey>Misc2</designationHotKey>
     <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
     <researchPrerequisites>
-      <li>PressurizedHull</li>
+      <li>ShipBasics</li>
       <li>AirConditioning</li>
     </researchPrerequisites>
 		<building>
@@ -585,7 +577,7 @@
     </placeWorkers>
     <designationHotKey>Misc2</designationHotKey>
     <researchPrerequisites>
-      <li>PressurizedHull</li>
+      <li>ShipBasics</li>
       <li>GunTurrets</li>
     </researchPrerequisites>
   </ThingDef>
@@ -681,7 +673,7 @@
     </placeWorkers>
     <designationHotKey>Misc3</designationHotKey>
     <researchPrerequisites>
-      <li>PressurizedHull</li>
+      <li>ShipBasics</li>
       <li>HeavyTurrets</li>
     </researchPrerequisites>
     <uiIconScale>0.95</uiIconScale>
@@ -722,7 +714,7 @@
     </comps>
     <designationHotKey>Misc2</designationHotKey>
     <researchPrerequisites>
-      <li>PressurizedHull</li>
+      <li>ShipBasics</li>
     </researchPrerequisites>
 	<statBases>
       <WorkToBuild>1200</WorkToBuild>

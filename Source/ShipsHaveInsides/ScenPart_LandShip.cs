@@ -8,6 +8,7 @@ using UnityEngine;
 using Verse;
 using System.Linq;
 using ShipsHaveInsides.Utilities;
+using ShipsHaveInsides.MapComponents;
 
 namespace RimWorld
 {
@@ -39,11 +40,17 @@ namespace RimWorld
             if (Find.GameInitData == null)
                 return;
             string str1 = Path.Combine(Path.Combine(GenFilePaths.SaveDataFolderPath, "Ships"), shipFactionName + ".rwship");
+            string actualFactionName = shipFactionName;
+            bool isVersion2 = false;
+            if(File.Exists(str1 + "2")) //woo 2.0
+            {
+                str1 += "2";
+                isVersion2 = true;
+            }
             Scribe.loader.InitLoading(str1);
 
             FactionDef factionDef = Faction.OfPlayer.def;
-            ShipInteriorMod.Log(factionDef.fixedName);
-            List<Thing> thingList1 = new List<Thing>();
+            ShipDefinition ship = null;
 
             ShipInteriorMod.Log("Loading base managers...");
             Scribe_Deep.Look(ref Current.Game.uniqueIDsManager, false, "uniqueIDsManager", new object[0]);
@@ -51,16 +58,26 @@ namespace RimWorld
             Scribe_Deep.Look(ref Current.Game.drugPolicyDatabase, false, "drugPolicyDatabase", new object[0]);
             Scribe_Deep.Look(ref Current.Game.outfitDatabase, false, "outfitDatabase", new object[0]);
 
+            //spawn a temp pawn.
+            Pawn tmpPawn = StartingPawnUtility.NewGeneratedStartingPawn();
+
             //Advancing time
             ShipInteriorMod.Log("Advancing time...");
             Current.Game.tickManager.DebugSetTicksGame(Current.Game.tickManager.TicksAbs + 3600000 * Rand.RangeInclusive(Mod.minTravelTime.Value, Mod.maxTravelTime.Value));
 
-            Scribe_Collections.Look(ref thingList1, "things", (LookMode)2, new object[0]);
-            
-            this.highCorner = thingList1.Aggregate(new IntVec3(0, 0, 0), 
-                (highCorner, t) => new IntVec3(Math.Max(highCorner.x, t.Position.x), 0, Math.Max(highCorner.z, t.Position.z)));
-            this.lowCorner = thingList1.Aggregate(new IntVec3(int.MaxValue, 0, int.MaxValue), 
-                (lowCorner, t) => new IntVec3(Math.Min(lowCorner.x, t.Position.x), 0, Math.Min(lowCorner.z, t.Position.z)));
+            if (isVersion2)
+            {
+                Scribe_Values.Look(ref actualFactionName, "playerFactionName");
+                Scribe_Deep.Look(ref ship, "shipDefinition");
+            }else
+            {
+                ship = new ShipDefinition();
+                //load the data the more cludgey way.
+                ship.ExposeData();
+            }
+
+            highCorner = ship.Max;
+            lowCorner = ship.Min;
 
             IntVec3 spot = MapGenerator.PlayerStartSpot;
             int width = highCorner.x - lowCorner.x;
@@ -78,50 +95,42 @@ namespace RimWorld
             lowCorner.z += offsety;
             highCorner.x += offsetx;
             highCorner.z += offsety;
+            
+            tmpPawn.Position = lowCorner - new IntVec3(3,0,3);
+            tmpPawn.SpawnSetup(map, false);
 
             ShipInteriorMod.Log("Low Corner: " + lowCorner.x + ", " + lowCorner.y + ", " + lowCorner.z);
             ShipInteriorMod.Log("High Corner: " + highCorner.x + ", " + highCorner.y + ", " + highCorner.z);
             ShipInteriorMod.Log("Map Size: " + map.Size.x + ", " + map.Size.y + ", " + map.Size.z);
 
-            ShipInteriorMod.Log("Adapting ship for world...");
-            new ThingMutator<Thing>()
-                .ExpandContained<Building_CryptosleepCasket, Pawn>(casket => casket.ContainedThing)
-                .Move(oldPos => new IntVec3(oldPos.x + offsetx, oldPos.y, oldPos.z + offsety))
-                .SetFaction(Faction.OfPlayer)
-                .ClearOwnership()
-                .UnsafeExecute(thingList1);
+            ship.AdaptToNewGame(map, offsetx, offsety, "Landing", true, Handler);
 
-            ShipInteriorMod.Log("Killing Everyone stowed away...");
-            new ThingMutator<Thing>()
-                .For<Pawn>(p =>
-                {
-                    p.Kill(null);
-                })
-                .UnsafeExecute(thingList1);
-
-            ShipInteriorMod.Log("Cleaning map...");
             new MapScanner()
                 .DestroyThings(-2, 2)
                 .ForPoints((point, m) => m.roofGrid.SetRoof(point, null), -2, 2)
                 .ForPoints((point, m) => m.terrainGrid.SetTerrain(point, TerrainDefOf.Gravel))
                 .Unfog(-3, 3)
-                .UnsafeExecute(map, lowCorner, highCorner);
+                .QueueAsLongEvent(map, lowCorner, highCorner, "Landing_Clean", true, Handler);
 
-            ShipInteriorMod.Log("Spawning ship...");
-            new ThingMutator<Thing>()
-                .For<Thing>(x => x.SpawnSetup(map, false))
-                .UnsafeExecute(thingList1);
+            ship.SpawnInNewGame(map, "Landing", true, Handler);
+            
 
-            ShipInteriorMod.Log("Loading managers...");
-            Scribe_Deep.Look(ref Current.Game.researchManager, false, "researchManager", new object[0]);
-            Scribe_Deep.Look(ref Current.Game.taleManager, false, "taleManager", new object[0]);
-            Scribe_Deep.Look(ref Current.Game.playLog, false, "playLog", new object[0]);
-            Scribe.loader.FinalizeLoading();
+            LongEventHandler.QueueLongEvent(() =>
+            {
+                ShipInteriorMod.Log("Loading managers...");
+                Scribe_Deep.Look(ref Current.Game.researchManager, false, "researchManager", new object[0]);
+                Scribe_Deep.Look(ref Current.Game.taleManager, false, "taleManager", new object[0]);
+                Scribe_Deep.Look(ref Current.Game.playLog, false, "playLog", new object[0]);
+                Scribe.loader.FinalizeLoading();
+                tmpPawn.DeSpawn();
 
-            Faction.OfPlayer.Name = this.shipFactionName;
+                Faction.OfPlayer.Name = actualFactionName;
 
-            ShipInteriorMod.Log("Done.");
+                ShipInteriorMod.Log("Done.");
+            }, "Landing_Managers", true, Handler);
         }
+
+        private void Handler(Exception e) => ShipInteriorMod.instLogger.Error("Error during landing: {0}", e.Message);
 
         public override string Summary(Scenario scen)
         {

@@ -46,4 +46,38 @@
     </scoreStages>
   </RoomStatDef>
 
+  <RoomStatDef>
+    <defName>CO2</defName>
+    <label>carbon dioxide</label>
+    <workerClass>RoomStatWorker_CO2</workerClass>
+    <updatePriority>1</updatePriority>
+    <displayRounded>true</displayRounded>
+    <roomlessScore>0</roomlessScore>
+    <scoreStages>
+      <li>
+        <label>none</label>
+      </li>
+      <li>
+        <minScore>0.2</minScore>
+        <label>safe</label>
+      </li>
+      <li>
+        <minScore>1.5</minScore>
+        <label>high</label>
+      </li>
+      <li>
+        <minScore>4</minScore>
+        <label>toxic</label>
+      </li>
+      <li>
+        <minScore>6</minScore>
+        <label>highly toxic</label>
+      </li>
+      <li>
+        <minScore>7</minScore>
+        <label>deadly</label>
+      </li>
+    </scoreStages>
+  </RoomStatDef>
+
 </Defs>

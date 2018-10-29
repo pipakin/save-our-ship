@@ -90,6 +90,15 @@ namespace ShipsHaveInsides.Utilities
             }, minOffset, maxOffset);
         }
 
+        public void QueueAsLongEvent(Map map, IntVec3 min, IntVec3 max, string textKey, bool async, Action<Exception> handler)
+        {
+            LongEventHandler.QueueLongEvent(() =>
+            {
+                ShipInteriorMod.Log(textKey.Translate() + "...");
+                UnsafeExecute(map, min, max);
+            }, textKey, async, handler);
+        }
+
         public void UnsafeExecute(Map map, IntVec3 min, IntVec3 max)
         {
             int minminOffset = actions.Min(a => a.minOffset);

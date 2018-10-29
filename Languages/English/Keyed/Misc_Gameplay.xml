@@ -11,4 +11,10 @@
 	<MustPlaceSolarShipWithFreeSpaces>Must place extendable solar panel with free space.</MustPlaceSolarShipWithFreeSpaces>
 	<ShipInsideOrbit>Orbit</ShipInsideOrbit>
 	<ShipInsideOrbitDesc>Launch the ship to orbit. Doesn't require cryptocaskets, but the doors should probably be closed and locked.</ShipInsideOrbitDesc>
+	<ShipInsideLand>Land</ShipInsideLand>
+	<ShipInsideLandDesc>Land on the planet surface. Make sure you don't forget anyone!</ShipInsideLandDesc>
+	<ShipInsideRename>Rename</ShipInsideRename>
+	<ShipInsideRenameDesc>Rename the ship. I hear that's good luck.</ShipInsideRenameDesc>
+	<ShipInsideShortJump>Short Range Jump</ShipInsideShortJump>
+	<ShipInsideShortJumpDesc>Jump to a new orbit location. Make sure everyone is inside!</ShipInsideShortJumpDesc>
 </LanguageData>

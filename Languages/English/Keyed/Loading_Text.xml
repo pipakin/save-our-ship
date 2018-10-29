@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <Landing_Spot>Scanning For Landing Zone</Landing_Spot>
+  <Landing_Adapt>Scanning For Landing Zone</Landing_Adapt>
+  <Landing_Stowaways>Prosecuting Stowaways</Landing_Stowaways>
+  <Landing_Clean>Performing Braking Burn</Landing_Clean>
+  <Landing_Spawn>Final Approach</Landing_Spawn>
+  <Landing_Managers>Downloading Environment Details</Landing_Managers>
+  <Landing_Swap>Scanning Environment</Landing_Swap>
+  <Landing_DestroyOldMap>Calibrating Navigation Array</Landing_DestroyOldMap>
+
+  <Orbit_Generate>Plotting Gravity Turn</Orbit_Generate>
+  <Orbit_Spawn>Breaking Atmosphere</Orbit_Spawn>
+  <Orbit_Swap>Scanning Environment</Orbit_Swap>
+  <Orbit_Meteors>Navigating Asteroids</Orbit_Meteors>
+
+  <ShortJump_Generate>Spinning Up Drives</ShortJump_Generate>
+  <ShortJump_Spawn>Jumping</ShortJump_Spawn>
+  <ShortJump_Swap>Scanning Environment</ShortJump_Swap>
+  <ShortJump_Meteors>Scanning Environment</ShortJump_Meteors>
+  <ShortJump_DestroyOldMap>Calibrating Navigation Array</ShortJump_DestroyOldMap>
+
+</LanguageData>

@@ -40,12 +40,4 @@
     </value>
   </Operation>
 
-  <Operation Class="PatchOperationAdd">
-    <xpath>//ResearchProjectDef[defName = "ShipBasics"]/prerequisites</xpath>
-    <order>Append</order>
-    <value>
-      <li>OribtalRocketry</li>
-    </value>
-  </Operation>
-
 </Patch>
