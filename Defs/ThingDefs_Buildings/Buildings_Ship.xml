@@ -31,10 +31,6 @@
 	  <Plasteel>5</Plasteel>
     </costList>
     <comps>
-      <li Class="CompProperties_Power">
-        <compClass>CompPowerTransmitter</compClass>
-        <transmitsPower>true</transmitsPower>
-      </li>
       <li Class="CompProperties_ShipPart"/>
 		  <li Class="CompProperties_RoofMe"/>
     </comps>

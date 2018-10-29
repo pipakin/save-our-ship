@@ -139,7 +139,7 @@ namespace ShipsHaveInsides.MapComponents
             {
                 //remove all the parts
                 thingsInShip.RemoveAll(p => otherThings.Contains(p));
-                RegeneratePoints();
+                RegeneratePoints(true);
 
                 var defs = new List<ShipDefinition>();
                 foreach (var existingThing in Things)
@@ -237,8 +237,10 @@ namespace ShipsHaveInsides.MapComponents
             }
         }
 
-        public void RegeneratePoints()
+        public void RegeneratePoints(bool clear = false)
         {
+            if (clear) positionsInShip.Clear();
+
             foreach (var thing in Things)
             {
                 if (thing.def.building?.shipPart == true)
