@@ -90,7 +90,7 @@ namespace ShipsHaveInsides.Utilities
         {
             return new ThingMutator<T1>(mutators.Concat(e =>
             {
-                if (e is T)
+                if (e is T && e.Spawned)
                 {
                     e.DeSpawn();
                 }
@@ -188,7 +188,7 @@ namespace ShipsHaveInsides.Utilities
         }
 
 
-        public HashSet<T1> UnsafeExecute(IEnumerable<T1> entities)
+        public HashSet<T1> UnsafeExecute(IEnumerable<T1> entities, Action<Exception> handler = null)
         {
             HashSet<T1> allEntities = new HashSet<T1>(entities);
             HashSet<T1> entitiesToAdd = new HashSet<T1>();
@@ -212,7 +212,7 @@ namespace ShipsHaveInsides.Utilities
                     }
                     catch (Exception ex)
                     {
-                        exceptionHandler(ex);
+                        (handler ?? exceptionHandler)(ex);
                     }
                 }
             }
@@ -228,7 +228,7 @@ namespace ShipsHaveInsides.Utilities
             LongEventHandler.QueueLongEvent(() =>
             {
                 ShipInteriorMod.Log(textKey.Translate() + "...");
-                cont.Resolve(UnsafeExecute(items), async);
+                cont.Resolve(UnsafeExecute(items, handler), async);
             }, textKey, async, handler);
 
             return cont;

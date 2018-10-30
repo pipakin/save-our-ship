@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Harmony;
+using RimWorld;
 using ShipsHaveInsides.Utilities;
 using System;
 using System.Collections.Generic;
@@ -308,7 +309,7 @@ namespace ShipsHaveInsides.MapComponents
             Dictionary<Pawn, Building_Bed> ownedBeds = new Dictionary<Pawn, Building_Bed>();
 
             return new ThingMutator<Thing>()
-                .ExpandContained<Building, Thing>(b => GridsUtility.GetThingList(b.Position, oldMap).Where(t => !(t is Building) && !(t is Mote)))
+                .ExpandContained<Building, Thing>(b => GridsUtility.GetThingList(b.Position, oldMap).Where(t => !(t is Building) && !(t is Mote) && !(t is Plant)))
                 .For<Pawn>(p => {
                     ownedBeds[p] = p.ownership.OwnedBed;
                     if (ownedBeds[p] != null)
@@ -316,10 +317,36 @@ namespace ShipsHaveInsides.MapComponents
                 })
                 .QueueAsLongEvent(Things, LoadingPrefix + "_Spawn", async, handler)
                 .Then(new ThingMutator<Thing>()
+                        .ForComp<CompPower>(powerComp =>
+                        {
+                            PowerConnectionMaker.DisconnectFromPowerNet(powerComp);
+                            oldMap.powerNetManager.UpdatePowerNetsAndConnections_First();
+                        })
                         .DeSpawn<Thing>()
                         .Move(x => x + offset)
                         .SpawnInto<Thing>(newMap)
+                        .ForComp<CompPowerTrader>(powerComp =>
+                        {
+                            powerComp.PowerOn = true;
+                        })
+                        .ForComp<CompPowerPlant>(powerComp =>
+                        {
+                            powerComp.UpdateDesiredPowerOutput();
+                        })
                         .SetAsHome<Thing>(x => x.def.defName == "ShipHullTile" || x.def.defName == "ShipAirlock")
+                    , LoadingPrefix + "_Spawn", handler)
+                .Then(new ThingMutator<Thing>()
+                        .ForComp<CompPowerTrader>(powerComp =>
+                        {
+                            if (!powerComp.PowerOn)
+                            {
+                                newMap().powerNetManager.UpdatePowerNetsAndConnections_First();
+                                if (powerComp.PowerNet != null && powerComp.PowerNet.CurrentEnergyGainRate() > 1E-07f)
+                                {
+                                    powerComp.PowerOn = true;
+                                }
+                            }
+                        })
                     , LoadingPrefix + "_Spawn", handler)
                 .Then(() => {
                     foreach(var bedOwn in ownedBeds)
@@ -535,7 +562,14 @@ namespace ShipsHaveInsides.MapComponents
                     actions[rg] = new List<Func<RoomGroup, GasVolume, GasVolume>>();
                 }
 
-                actions[rg].Add((r, gas) => gas.addDirect(added ?? GasVolume.Empty).removeDirect(removed ?? GasVolume.Empty));
+                actions[rg].Add((r, gas) => {
+                    float removedAmount;
+                    var rGas = gas.removeDirect(removed ?? GasVolume.Empty, out removedAmount);
+                    var toAdd = (removed != null && added != null) ?
+                        new GasVolume(added.mixture * removedAmount, added.metersCubed)
+                        : added ?? GasVolume.Empty;
+                    return rGas.addDirect(toAdd);
+                });
             }
         }
     }

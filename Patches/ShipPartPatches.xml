@@ -40,4 +40,38 @@
     </value>
   </Operation>
 
+  <Operation Class="PatchOperationAdd">
+    <xpath>//ThingDef[defName = "PodLauncher"]/comps</xpath>
+    <order>Append</order>
+    <value>
+      <li Class="CompProperties_ShipPart"/>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>//ThingDef[defName = "TransportPod"]/comps</xpath>
+    <order>Append</order>
+    <value>
+      <li Class="CompProperties_ShipPart"/>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>//ThingDef[defName = "PodLauncher"]/building</xpath>
+    <order>Append</order>
+    <value>
+      <shipPart>true</shipPart>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>//ThingDef[defName = "TransportPod"]</xpath>
+    <order>Append</order>
+    <value>
+      <building>
+        <shipPart>true</shipPart>
+      </building>
+    </value>
+  </Operation>
+
 </Patch>

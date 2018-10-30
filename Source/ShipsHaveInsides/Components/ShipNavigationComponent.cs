@@ -226,10 +226,6 @@ namespace RimWorld
                 }, "ShortJump_Meteors", Handler)
                 .Then(() => { Current.Game.CurrentMap = newMap; }, "ShortJump_Swap", Handler)
                 .Then(() => {
-                    var pow = new GenStep_Power();
-                    pow.Generate(Find.CurrentMap, new GenStepParams());
-                }, "ShortJump_Swap", Handler)
-                .Then(() => {
                     foreach (var cell in Find.CurrentMap.areaManager.Home.ActiveCells.ToList())
                     {
                         if (!Find.CurrentMap.thingGrid.ThingsAt(cell).Any(x => x.def.defName == "ShipHullTile" || x.def.defName == "ShipAirlock"))
@@ -283,11 +279,6 @@ namespace RimWorld
                 {
                     Current.Game.CurrentMap = newMap;
                 }, "Landing_Swap", Handler)
-                .Then(() => {
-                    var pow = new GenStep_Power();
-                    pow.Generate(Find.CurrentMap, new GenStepParams());
-                }
-                , "Landing_Swap", Handler)
                 .Then(() => {
                      foreach (var pawn in Find.CurrentMap.mapPawns.AllPawns.Where(p => p.Faction == Faction.OfPlayer)) {
                          pawn.playerSettings.AreaRestriction = Find.CurrentMap.areaManager.Home;
@@ -398,10 +389,6 @@ namespace RimWorld
                     }
                 }, "Orbit_Meteors", Handler)
                 .Then(() => { Current.Game.CurrentMap = newMap; }, "Orbit_Swap", Handler)
-                .Then(() => {
-                    var pow = new GenStep_Power();
-                    pow.Generate(Find.CurrentMap, new GenStepParams());
-                }, "Orbit_Swap", Handler)
                 .Then(() => {
                     foreach(var cell in Find.CurrentMap.areaManager.Home.ActiveCells.ToList())
                     {

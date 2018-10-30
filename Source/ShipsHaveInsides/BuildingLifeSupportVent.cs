@@ -165,10 +165,16 @@ namespace RimWorld
             return new GasVolume(mixture + second.ExpandInto(newMetersCubed).mixture, newMetersCubed);
         }
 
-        public GasVolume removeDirect(GasVolume second)
+        public GasVolume removeDirect(GasVolume second, out float amount)
         {
             float newMetersCubed = metersCubed;
-            return new GasVolume(mixture - second.ExpandInto(newMetersCubed).mixture, newMetersCubed);
+            float oldTotal = mixture.totalPressure;
+            var expanded = second.ExpandInto(newMetersCubed).mixture;
+            var newMixture = mixture - expanded;
+
+            amount = (oldTotal - newMixture.totalPressure) / expanded.totalPressure;
+
+            return new GasVolume(newMixture, newMetersCubed);
         }
 
         public static GasVolume operator+(GasVolume first, GasVolume second)

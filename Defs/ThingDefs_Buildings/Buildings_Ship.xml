@@ -34,9 +34,6 @@
       <li Class="CompProperties_ShipPart"/>
 		  <li Class="CompProperties_RoofMe"/>
     </comps>
-    <placeWorkers>
-      <li>PlaceWorker_InsideShipRoom</li>
-    </placeWorkers>
     <rotatable>false</rotatable>
     <selectable>false</selectable>
     <neverMultiSelect>true</neverMultiSelect>
@@ -341,6 +338,7 @@
       </blueprintGraphicData>
     </building>
     <comps>
+    <li Class="CompProperties_RoofMe"/>
       <li Class="CompProperties_Power">
         <compClass>CompPowerPlantSolarShip</compClass>
         <basePowerConsumption>-1</basePowerConsumption>
@@ -457,6 +455,7 @@
 			<li Class="CompProperties_DefaultStuff">
 				<defaultStuff>Plasteel</defaultStuff>
 			</li>
+      <li Class="CompProperties_RoofMe"/>
     </comps>
     <stuffCategories>
       <li>Metallic</li>
