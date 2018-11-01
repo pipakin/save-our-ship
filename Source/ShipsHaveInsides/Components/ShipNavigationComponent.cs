@@ -111,7 +111,7 @@ namespace RimWorld
 
             if(parent.Map.terrainGrid.TerrainAt(IntVec3.Zero).defName == "HardVacuum")
             {
-                gizmos.Add(land);
+                if (def != null) gizmos.Add(land);
                 if (def.ReadyForShortRangeJump)
                 {
                     gizmos.Add(shortJump);
@@ -119,7 +119,7 @@ namespace RimWorld
             }
             else
             {
-                gizmos.Add(orbit);
+                if (def != null) gizmos.Add(orbit);
             }
 
             if (def != null)
@@ -261,7 +261,7 @@ namespace RimWorld
                 .GetSpaceAtmosphereMapComponent()
                 .DefinitionAt(parent.Position);
 
-            IntVec3? landingSpot;
+            IntVec3? landingSpot = null;
 
             LongEventHandler.QueueLongEvent(() =>
             {
@@ -274,7 +274,7 @@ namespace RimWorld
             }, "Landing_Spot", true, Handler);
             
             def
-                .Move(oldMap, () => newMap, "Landing", true, Handler)
+                .Move(oldMap, () => newMap, "Landing", true, Handler, null, landingSpot)
                 .Then(() =>
                 {
                     Current.Game.CurrentMap = newMap;

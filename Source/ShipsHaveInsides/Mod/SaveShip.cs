@@ -32,7 +32,9 @@ namespace ShipsHaveInsides.Mod
                     ScribeMetaHeaderUtility.WriteMetaHeader();
                     Scribe_Values.Look<FactionDef>(ref Faction.OfPlayer.def, "playerFactionDef", null, false);
                     Scribe_Values.Look(ref name, "playerFactionName");
+                    def.ShouldSaveThings = true;
                     Scribe_Deep.Look(ref def, "shipDefinition");
+                    def.ShouldSaveThings = false;
                     Scribe_Deep.Look<ResearchManager>(ref Current.Game.researchManager, false, "researchManager", new object[0]);
                     Scribe_Deep.Look<TaleManager>(ref Current.Game.taleManager, false, "taleManager", new object[0]);
                     Scribe_Deep.Look<UniqueIDsManager>(ref Current.Game.uniqueIDsManager, false, "uniqueIDsManager", new object[0]);

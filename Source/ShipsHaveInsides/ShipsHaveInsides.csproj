@@ -89,6 +89,7 @@
     <Compile Include="Mod\ShipInteriorMod.cs" />
     <Compile Include="Components\OverlayComponent.cs" />
     <Compile Include="Mod\ThingRegistrations.cs" />
+    <Compile Include="Mod\WorldObjectsHolder_MapParentAt.cs" />
     <Compile Include="PlaceWorker_NotUnderNonShipRoof.cs" />
     <Compile Include="Placeworker_SolarShip.cs" />
     <Compile Include="Components\UnfoldComponent.cs" />
@@ -108,5 +109,6 @@
     <Compile Include="Utilities\MapScanner.cs" />
     <Compile Include="Utilities\ThingMutator.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

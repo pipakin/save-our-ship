@@ -356,6 +356,7 @@ namespace ShipsHaveInsides.MapComponents
                             bedOwn.Key.ownership.ClaimBedIfNonMedical(bedOwn.Value);
                         }
                     }
+                    positionsInShip = positionsInShip.Select(x => new KeyValuePair<IntVec3, GasMixture>(x.Key + offset, x.Value)).ToDictionary(x => x.Key, x => x.Value);
                     newMap().GetSpaceAtmosphereMapComponent().AddWholeShip(this);
                     oldMap.GetSpaceAtmosphereMapComponent().processUpdates = true;
                     newMap().GetSpaceAtmosphereMapComponent().processUpdates = true;
