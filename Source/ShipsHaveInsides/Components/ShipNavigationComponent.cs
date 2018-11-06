@@ -19,6 +19,7 @@ namespace RimWorld
         }
 
         private bool CanLaunchNow => !ShipUtility.LaunchFailReasons(parentBuilding).Any();
+        private bool CanOrbitNow => !ShipUtility.LaunchFailReasons(parentBuilding).Any(x => x != Translator.Translate("ShipReportNoFullPods"));
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
@@ -45,7 +46,7 @@ namespace RimWorld
                 defaultLabel = "ShipInsideOrbit".Translate(),
                 defaultDesc = "ShipInsideOrbitDesc".Translate()
             };
-            if (!CanLaunchNow)
+            if (!CanOrbitNow)
             {
                 orbit.Disable(ShipUtility.LaunchFailReasons(parentBuilding).First());
             }
@@ -62,7 +63,7 @@ namespace RimWorld
                 defaultLabel = "ShipInsideLand".Translate(),
                 defaultDesc = "ShipInsideLandDesc".Translate()
             };
-            if (!CanLaunchNow)
+            if (!CanOrbitNow)
             {
                 land.Disable(ShipUtility.LaunchFailReasons(parentBuilding).First());
             }
