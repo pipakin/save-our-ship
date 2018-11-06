@@ -272,6 +272,22 @@ namespace ShipsHaveInsides.MapComponents
         {
             IntVec3 outCell = IntVec3.Zero;
 
+            var zone = map.areaManager.AllAreas.FirstOrDefault(x => x.Label.StartsWith(name));
+            if (zone != null)
+            {
+                var avgPostion = (zone.ActiveCells.Aggregate(IntVec3.Zero, (a, b) => a + b).ToVector3() / zone.ActiveCells.Count()).ToIntVec3();
+
+                return avgPostion;
+            }
+            else
+            {
+                ShipsHaveInsides.Mod.ShipInteriorMod.instLogger.Trace("No zone found in list:");
+                foreach(var zone1 in map.areaManager.AllAreas)
+                {
+                    ShipsHaveInsides.Mod.ShipInteriorMod.instLogger.Trace(" - " + zone1.Label);
+                }
+            }
+
             if (CellFinderLoose.TryFindRandomNotEdgeCellWith((int)Mathf.Ceil(Mathf.Max(Max.x - Min.x, Max.z - Min.z)), cell =>
              {
                  LongEventHandler.SetCurrentEventText("Scanning for Landing Zone: (" + cell.x + ", " + cell.z + ")");
@@ -283,6 +299,7 @@ namespace ShipsHaveInsides.MapComponents
                  }
                  catch
                  {
+                     ShipsHaveInsides.Mod.ShipInteriorMod.instLogger.Error("error selecting position at (" + cell.x + ", " + cell.z + ")");
                      return false;
                  }
              }, map, out outCell))
@@ -291,14 +308,14 @@ namespace ShipsHaveInsides.MapComponents
             return null;
         }
 
-        public ThingMutator<Thing>.ThenContainer<Thing> Move(Map oldMap, Func<Map> newMap, string LoadingPrefix, bool async, Action<Exception> handler, AirShipWorldObject obj = null, IntVec3? landingSpot = null, bool clearLandingZone = false)
+        public ThingMutator<Thing>.ThenContainer<Thing> Move(Map oldMap, Func<Map> newMap, string LoadingPrefix, bool async, Action<Exception> handler, AirShipWorldObject obj = null, Func<IntVec3> landingSpotFn = null, bool clearLandingZone = false)
         {
             if(obj != null)
                 obj.ShipDefinition = this;
 
             ReadyForShortRangeJump = false;
 
-            var offset = landingSpot != null ? landingSpot.Value - Center : IntVec3.Zero;
+            Func<IntVec3> offsetFn = () => landingSpotFn != null ? landingSpotFn() - Center : IntVec3.Zero;
 
             LongEventHandler.QueueLongEvent(() => {
                 oldMap.GetSpaceAtmosphereMapComponent().processUpdates = false;
@@ -323,7 +340,7 @@ namespace ShipsHaveInsides.MapComponents
                             oldMap.powerNetManager.UpdatePowerNetsAndConnections_First();
                         })
                         .DeSpawn<Thing>()
-                        .Move(x => x + offset)
+                        .Move(x => x + offsetFn())
                         .SpawnInto<Thing>(newMap)
                         .ForComp<CompPowerTrader>(powerComp =>
                         {
@@ -356,7 +373,7 @@ namespace ShipsHaveInsides.MapComponents
                             bedOwn.Key.ownership.ClaimBedIfNonMedical(bedOwn.Value);
                         }
                     }
-                    positionsInShip = positionsInShip.Select(x => new KeyValuePair<IntVec3, GasMixture>(x.Key + offset, x.Value)).ToDictionary(x => x.Key, x => x.Value);
+                    positionsInShip = positionsInShip.Select(x => new KeyValuePair<IntVec3, GasMixture>(x.Key + offsetFn(), x.Value)).ToDictionary(x => x.Key, x => x.Value);
                     newMap().GetSpaceAtmosphereMapComponent().AddWholeShip(this);
                     oldMap.GetSpaceAtmosphereMapComponent().processUpdates = true;
                     newMap().GetSpaceAtmosphereMapComponent().processUpdates = true;

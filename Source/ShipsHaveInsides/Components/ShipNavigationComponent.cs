@@ -275,7 +275,7 @@ namespace RimWorld
             }, "Landing_Spot", true, Handler);
             
             def
-                .Move(oldMap, () => newMap, "Landing", true, Handler, null, landingSpot)
+                .Move(oldMap, () => newMap, "Landing", true, Handler, null, () => landingSpot.Value)
                 .Then(() =>
                 {
                     Current.Game.CurrentMap = newMap;

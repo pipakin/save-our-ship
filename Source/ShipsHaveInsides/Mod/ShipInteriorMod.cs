@@ -42,6 +42,8 @@ namespace ShipsHaveInsides.Mod
         public SettingHandle<int> meteorMinCount;
         public SettingHandle<int> meteorMaxCount;
         public SettingHandle<int> meteorSizeMultiplier;
+        //public SettingHandle<float> hypoxiaO2Level;
+        //public SettingHandle<float> hypercapniaCO2Level;
         public SettingHandle<int> framesBetweenPlanetUpdates;
         public SettingHandle<bool> drawDebugShipRegions;
 
