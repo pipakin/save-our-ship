@@ -192,7 +192,7 @@ namespace ShipsHaveInsides.MapComponents
             if (Scribe.mode == LoadSaveMode.Saving && ShouldSaveThings)
             {
                 list = new ThingMutator<Thing>()
-                   .ExpandContained<Building, Thing>(b => GridsUtility.GetThingList(b.Position, b.Map).Where(t => !(t is Building) && !(t is Mote)))
+                   .ExpandContained<Building, Thing>(b => GridsUtility.GetThingList(b.Position, b.Map).Where(t => !(t is Building) && !(t is Mote) && t.Spawned))
                    .UnsafeExecute(Things)
                    .ToList();
             }
@@ -383,6 +383,9 @@ namespace ShipsHaveInsides.MapComponents
                 .SetFaction(Faction.OfPlayer)
                 .ClearOwnership()
                 .QueueAsLongEvent(thingsToSpawn, LoadingPrefix + "_Adapt", async, handler)
+                .Then(() =>
+                    positionsInShip = positionsInShip.Select(x => new KeyValuePair<IntVec3, GasMixture>(x.Key + new IntVec3(offsetx, 0, offsety), x.Value)).ToDictionary(x => x.Key, x => x.Value)
+                , LoadingPrefix + "_Spawn", handler)
                 .Then(() => new ThingMutator<Thing>()
                 .For<Pawn>(p =>
                 {
